@@ -9,15 +9,12 @@ vcpkg_from_github(
 string(COMPARE EQUAL "${VCPKG_LIBRARY_LINKAGE}" "dynamic" BUILD_SHARED_LIBS)
 
 vcpkg_cmake_configure(
-    SOURCE_PATH "${SOURCE_PATH}/libnatpmp"
+    SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
     -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
 )
 
 vcpkg_cmake_install()
 vcpkg_copy_pdbs()
-
-vcpkg_cmake_config_fixup(CONFIG_PATH "/lib/cmake/${PORT}")
-vcpkg_fixup_pkgconfig()
 
 vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE")
