@@ -1,6 +1,6 @@
 {
   "default": {
-    "natpmp": {
+    "libnatpmp": {
       "baseline": "2024.8.4",
       "port-version": 0
     }

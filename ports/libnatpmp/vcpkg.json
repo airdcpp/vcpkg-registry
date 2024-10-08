@@ -1,5 +1,5 @@
 {
-  "name": "natpmp",
+  "name": "libnatpmp",
   "version": "2024.8.4",
   "description": "NAT Port Mapping Protocol implementation",
   "dependencies": [
