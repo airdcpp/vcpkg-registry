@@ -19,12 +19,8 @@ vcpkg_cmake_configure(
 vcpkg_cmake_install()
 vcpkg_copy_pdbs()
 
-# vcpkg_cmake_config_fixup(CONFIG_PATH "/lib/cmake/${PORT}")
-# vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/natpmp PACKAGE_NAME natpmp)
-
 vcpkg_fixup_pkgconfig()
-# vcpkg_cmake_config_fixup()
-vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/natpmp)
+vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/natpmp PACKAGE_NAME natpmp)
 
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/bin" "${CURRENT_PACKAGES_DIR}/debug/bin")
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
