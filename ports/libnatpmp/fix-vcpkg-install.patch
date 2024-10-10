@@ -1,0 +1,80 @@
+--- a/CMakeLists.txt	2024-10-10 12:29:02.418998956 +0300
++++ b/CMakeLists.txt	2024-10-10 12:15:31.309267010 +0300
+@@ -22,7 +22,11 @@
+ 
+ # Library itself
+ add_library(natpmp ${NATPMP_SOURCES})
+-target_include_directories(natpmp PUBLIC ${CMAKE_CURRENT_LIST_DIR})
++target_include_directories(natpmp PUBLIC
++    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
++    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
++)
++
+ target_compile_definitions(natpmp PRIVATE -DENABLE_STRNATPMPERR)
+ 
+ if (WIN32)
+@@ -38,6 +42,36 @@
+ 	target_link_libraries(natpmp PUBLIC network)
+ endif ()
+ 
++include(CMakePackageConfigHelpers)
++include(GNUInstallDirs)
++
++# Targets
++install(TARGETS ${PROJECT_NAME}
++    EXPORT "${PROJECT_NAME}Targets"
++    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} # bin
++    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} # lib
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} # lib
++    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} # include
++)
++
++install(EXPORT "${PROJECT_NAME}Targets"
++    FILE "${PROJECT_NAME}Targets.cmake"
++    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
++)
++
++# Config files
++write_basic_package_version_file(
++	"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
++	VERSION ${PROJECT_VERSION}
++	COMPATIBILITY AnyNewerVersion
++)
++
++configure_package_config_file(
++    "${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in"
++    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
++    INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
++)
++
+ # Executables
+ add_executable(natpmpc natpmpc.c)
+ target_link_libraries(natpmpc natpmp)
+@@ -48,10 +82,17 @@
+ target_link_libraries(testgetgateway natpmp)
+ 
+ # natpmp.pc
+-include(GNUInstallDirs)
+ configure_file(natpmp.pc.in natpmp.pc @ONLY)
+ 
+-# install
++# install cmake files
++
++install(FILES
++    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
++    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
++    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
++)
++
++# install other
+ install(TARGETS natpmp natpmpc
+         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+
+--- /dev/null
++++ b/Config.cmake.in
+@@ -0,0 +1,4 @@
++@PACKAGE_INIT@
++include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
++check_required_components(@PROJECT_NAME@)
++
