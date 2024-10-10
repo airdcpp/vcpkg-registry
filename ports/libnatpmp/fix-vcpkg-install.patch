@@ -50,13 +50,13 @@
  # Executables
  add_executable(natpmpc natpmpc.c)
  target_link_libraries(natpmpc natpmp)
-@@ -48,10 +82,17 @@
+@@ -48,16 +82,23 @@
  target_link_libraries(testgetgateway natpmp)
- 
+
  # natpmp.pc
 -include(GNUInstallDirs)
  configure_file(natpmp.pc.in natpmp.pc @ONLY)
- 
+
 -# install
 +# install cmake files
 +
@@ -70,6 +70,13 @@
  install(TARGETS natpmp natpmpc
          RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
          LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+-install(FILES natpmp.h
++install(FILES natpmp.h natpmp_declspec.h
+         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/natpmp.pc
 
 --- /dev/null
 +++ b/Config.cmake.in
