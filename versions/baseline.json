@@ -3,6 +3,10 @@
     "libnatpmp": {
       "baseline": "2024.8.4",
       "port-version": 0
+    },
+    "websocketpp": {
+      "baseline": "0.8.2",
+      "port-version": 0
     }
   }
 }
